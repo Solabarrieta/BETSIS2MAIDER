@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<title>Query question</title>
+	</h:head>
+	<h:body>
+		<h:commandButton onclick="history.back(); return false;"
+			value="return" />
+		<h:form id="form1">
+			<!-- Date select -->
+			<tr>
+				<td>Event Date</td>
+			</tr>
+			<tr>
+				<td><p:calendar id="fecha" value="#{bets.fecha}"
+						navigator="false" mode="inline" var="fecha">
+						<p:ajax event="dateSelect" listener="#{bets.onDateSelect}"
+							update=":form2:mensajes,:form1:tablaEventos"></p:ajax>
+					</p:calendar></td>
+			</tr>
+			<tr>
+				<td><p:dataTable id="tablaEventos" value="#{bets.events}"
+						var="item" selectionMode="single" selection="#{bets.evento}"
+						rowKey="#{item.eventNumber}">
+						<p:ajax event="rowSelect" listener="#{bets.onRowSelect}"
+							update=":form2:tablaQuestions, :form1:mensajeEvento"></p:ajax>
+
+						<p:column headerText="Código">#{item.eventNumber}</p:column>
+						<p:column headerText="Evento">#{item.description}</p:column>
+					</p:dataTable> <h:messages id="mensajeEvento" style="color:blue" /></td>
+			</tr>
+		</h:form>
+		<h:form id="form2">
+			<td><p:dataTable id="tablaQuestions" value="#{bets.questions}"
+					var="item" selectionMode="single" selection="#{bets.pregunta}"
+					rowKey="#{item.questionNumber}">
+					<p:column headerText="Código">#{item.questionNumber}</p:column>
+					<p:column headerText="Descripción de Pregunta">#{item.question}</p:column>
+				</p:dataTable></td>
+			<td><h:messages id="mensajes" style="color:red" /></td>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
